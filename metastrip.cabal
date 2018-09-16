@@ -1,0 +1,95 @@
+-- This file has been generated from package.yaml by hpack version 0.28.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 701bc62787cea6cc5138c32f490b7e94fdbf9de7f75c1cd07214684048b6ab36
+
+name:           metastrip
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/metastrip#readme>
+homepage:       https://github.com/githubuser/metastrip#readme
+bug-reports:    https://github.com/githubuser/metastrip/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/metastrip
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_metastrip
+  hs-source-dirs:
+      src
+  default-extensions: ScopedTypeVariables DefaultSignatures FlexibleContexts OverloadedStrings TypeApplications BangPatterns LambdaCase
+  ghc-options: -O2 -Wall -Werror
+  build-depends:
+      JuicyPixels
+    , async
+    , base >=4.7 && <5
+    , bytestring
+    , cryptonite
+    , filepath
+    , memory
+    , optparse-applicative
+    , resource-pool
+    , spool
+    , vector
+  default-language: Haskell2010
+
+executable metastrip-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_metastrip
+  hs-source-dirs:
+      app
+  default-extensions: ScopedTypeVariables DefaultSignatures FlexibleContexts OverloadedStrings TypeApplications BangPatterns LambdaCase
+  ghc-options: -O2 -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      JuicyPixels
+    , async
+    , base >=4.7 && <5
+    , bytestring
+    , cryptonite
+    , filepath
+    , memory
+    , metastrip
+    , optparse-applicative
+    , resource-pool
+    , spool
+    , vector
+  default-language: Haskell2010
+
+test-suite metastrip-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_metastrip
+  hs-source-dirs:
+      test
+  default-extensions: ScopedTypeVariables DefaultSignatures FlexibleContexts OverloadedStrings TypeApplications BangPatterns LambdaCase
+  ghc-options: -O2 -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      JuicyPixels
+    , async
+    , base >=4.7 && <5
+    , bytestring
+    , cryptonite
+    , filepath
+    , memory
+    , metastrip
+    , optparse-applicative
+    , resource-pool
+    , spool
+    , vector
+  default-language: Haskell2010
