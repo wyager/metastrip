@@ -33,10 +33,9 @@ command = Clean <$> naming <*> directory <*> randomization <*> jpegSaveQuality <
     directory = OA.option (OA.maybeReader $ Just . Different) (OA.long "output-dir" <> OA.short 'o' <> OA.help "Output directory" <> OA.value Same <> OA.showDefault)
     numThreads = specifiedNumThreads <|> pure AutoSelectNumThreads
         where specifiedNumThreads = SpecifiedNumThreads <$> OA.option OA.auto (OA.long "num-threads" <> OA.short 'n' <> OA.help "Specify number of threads (default: # of cores available)")
-    randomization = aggressive <|> normal <|> none <|> pure (RandomizeWith Normal)
+    randomization = aggressive <|> none <|> pure (RandomizeWith Normal)
         where
-        aggressive = OA.flag' (RandomizeWith High) $ OA.long "aggressive" <> OA.short 'a' <> OA.help "Aggressively randomize pixel values"
-        normal = OA.flag' (RandomizeWith Normal) $ OA.long "normal" <> OA.short 'n' <> OA.help "Slightly randomize pixel values (default)"
+        aggressive = OA.flag' (RandomizeWith High) $ OA.long "aggressive" <> OA.short 'a' <> OA.help "Aggressively randomize pixel values (default: Slight randomization)"
         none = OA.flag' NoRandomization $ OA.long "dont-randomize" <> OA.short 'd' <> OA.help "Do not randomize pixel values at all"
     naming = random <|> inPlace <|> beforeExtension
         where
