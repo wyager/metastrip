@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 701bc62787cea6cc5138c32f490b7e94fdbf9de7f75c1cd07214684048b6ab36
+-- hash: 2353ae651ab40806bda2bc26bea1201f9c32a03a53ddd1b9ecf6e060a1cf082c
 
 name:           metastrip
 version:        0.1.0.0
@@ -47,7 +47,7 @@ library
     , vector
   default-language: Haskell2010
 
-executable metastrip-exe
+executable metastrip
   main-is: Main.hs
   other-modules:
       Paths_metastrip
