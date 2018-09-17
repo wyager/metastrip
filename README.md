@@ -10,7 +10,7 @@ Metastrip is a tool for stripping metadata for files. It supports the following 
 Metastrip can do the following:
 
 * Remove any file metadata
-* Slightly randomize pixel values to fight image hashing/steganography
+* Subtly randomize pixel values to combat image hashing/steganography
 * Generate random filenames
 
 It's reasonably fast and can use multiple cores.
@@ -40,3 +40,7 @@ Available options:
                            available)
   -h,--help                Show this help text
 ```
+
+## Installation
+
+The best way to install from source is to install [The Haskell Stack](https://docs.haskellstack.org/en/stable/README/) and then run `stack install`. It will usually take a few minutes to build the dependencies and the binary.
