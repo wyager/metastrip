@@ -19,16 +19,20 @@ data Directory = Same | Different FilePath deriving Show
 
 data Randomization = NoRandomization | RandomizeWith Aggressiveness deriving Show
 
+data NumThreads = AutoSelectNumThreads | SpecifiedNumThreads Int deriving Show
+
 data Command 
-    = Clean Naming Directory Randomization Int [FilePath] 
+    = Clean Naming Directory Randomization Int NumThreads [FilePath] 
     deriving Show
 
 command :: OA.Parser Command
-command = Clean <$> naming <*> directory <*> randomization <*> jpegSaveQuality <*> filepaths
+command = Clean <$> naming <*> directory <*> randomization <*> jpegSaveQuality <*> numThreads <*> filepaths
     where 
     filepaths = some $ OA.argument OA.str $ OA.metavar "FILES..."
     jpegSaveQuality = OA.option OA.auto (OA.long "jpeg-quality"  <> OA.short 'j'  <> OA.help "JPEG save quality (1-100)" <> OA.showDefault <> OA.value 50)
     directory = OA.option (OA.maybeReader $ Just . Different) (OA.long "output-dir" <> OA.short 'o' <> OA.help "Output directory" <> OA.value Same <> OA.showDefault)
+    numThreads = specifiedNumThreads <|> pure AutoSelectNumThreads
+        where specifiedNumThreads = SpecifiedNumThreads <$> OA.option OA.auto (OA.long "num-threads" <> OA.short 'n' <> OA.help "Specify number of threads (default: # of cores available)")
     randomization = aggressive <|> normal <|> none <|> pure (RandomizeWith Normal)
         where
         aggressive = OA.flag' (RandomizeWith High) $ OA.long "aggressive" <> OA.short 'a' <> OA.help "Aggressively randomize pixel values"
@@ -70,18 +74,22 @@ cleanFile naming directory rand jpegQuality path = case map toUpper ext of
     go formatter = 
         Pic.readImage path >>= \case
             Left err -> return (Left err)
-            Right image -> do
+            Right image -> Right <$> do
                 image' <- case rand of
                     NoRandomization -> return image
                     RandomizeWith aggr -> fastRandom $ clean' aggr image
                 thePath <- outPath
-                Right <$> formatter thePath image' 
+                formatter thePath image' 
 
 main :: IO ()
 main = do
-    Clean naming dir rand jpegQuality images <- getCommand
-    numCapabilities <- Conc.getNumCapabilities
-    threadPool <- createPool (return ()) (const $ return ()) 1 1.0 numCapabilities
+    Clean naming dir rand jpegQuality numThreads images <- getCommand
+    numProcessors <- Conc.getNumProcessors
+    Conc.setNumCapabilities numProcessors
+    let numThreads' = case numThreads of
+            AutoSelectNumThreads -> numProcessors
+            SpecifiedNumThreads n -> n
+    threadPool <- createPool (return ()) (const $ return ()) 1 1.0 numThreads'
     results <- mapM (\path -> async 
                             $ withResource threadPool 
                             $ \() -> cleanFile naming dir rand jpegQuality path) images
