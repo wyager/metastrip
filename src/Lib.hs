@@ -1,5 +1,4 @@
-module Lib
-    (Noisy, noise, Aggressiveness(..), clean, clean', fastRandom) where
+module Lib (Noisy, noise, Aggressiveness(..), clean, clean', fastRandom) where
 
 import qualified Codec.Picture as Pic
 import           Crypto.Random (MonadRandom)
@@ -9,7 +8,6 @@ import           Data.Vector.Storable.ByteString (byteStringToVector)
 import qualified Data.Vector.Storable as V
 import qualified Foreign.Storable as F
 import           Data.Proxy (Proxy(..))
-
 
 data Aggressiveness = Normal | High
     deriving Show
@@ -70,7 +68,6 @@ class Pic.Pixel px => Combine px where
                     -> V.Vector (Pic.PixelBaseComponent px)
     combine _ aggr l r = unfloat $ combine @Float Proxy aggr (float l) (float r)
 
-
 instance Combine Float where
     combine _ aggr = V.zipWith fiddle
         where
@@ -116,7 +113,6 @@ instance Floatable Float where
     {-# INLINE unfloat #-}
     unfloat = id 
 
-
 clean :: forall px m . (Noisy px, Combine px, MonadRandom m) => Aggressiveness -> Pic.Image px -> m (Pic.Image px)
 clean aggr (Pic.Image x y vec) = do
     Pic.Image _x' _y' vec' <- randomImage @px x y
@@ -142,5 +138,3 @@ fastRandom :: Random.MonadPseudoRandom Random.ChaChaDRG a -> IO a
 fastRandom action = do
     drg <- Random.drgNew
     return $ fst $ Random.withDRG drg action
-
-
