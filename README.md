@@ -13,7 +13,7 @@ Metastrip can do the following:
 * Subtly randomize pixel values to combat image hashing/steganography
 * Generate random filenames
 
-It's reasonably fast and can use multiple cores.
+It's fairly fast and can use multiple cores.
 
 Usage is as follows:
 
@@ -44,3 +44,13 @@ Available options:
 ## Installation
 
 The best way to install from source is to install [The Haskell Stack](https://docs.haskellstack.org/en/stable/README/) and then run `stack install`. It will usually take a few minutes to build the dependencies and the binary.
+
+## Limitations
+
+Right now, metastrip always decodes and re-encodes the image. This means that if you only want to strip metadata (and not randomize pixel values), metastrip is doing a lot of extra work (the slowest part by far is re-encoding the image) and also introducing a bit of extra error in lossy formats like jpg. Perhaps at some point `--dont-randomize` will avoid actually decoding and re-encoding the image data.
+
+## Security
+
+Parsing complex media formats is extremely fraught, especially for untrusted input. A very large portion of practical RCE vulnerabilities have involved unsafe multimedia parsers/codecs. metastrip is written in Haskell, which can help prevent the construction of such parsers/codecs. However, the codec library used here does use some unsafe constructs for the purpose of performance, so we don't get Haskell's usual full guarantee of memory safety. At some point, it would be nice to A) have a non-randomizing option which only used safe-by-construction parsers and didn't touch any (potentially unsafe) codec code and/or B) formally verify the memory safety of the codecs used, e.g. with LiquidHaskell. In any case, this is probably not your top concern.
+
+For fast generation of random data, metastrip uses ChaCha seeded by a strong system-provided entropy source.
