@@ -3,7 +3,7 @@ module Lib (Noisy, noise, Aggressiveness(..), clean, clean', fastRandom) where
 import qualified Codec.Picture as Pic
 import           Crypto.Random (MonadRandom)
 import qualified Crypto.Random as Random  
-import           Data.Word (Word8, Word16)
+import           Data.Word (Word8, Word16, Word32)
 import           Data.Vector.Storable.ByteString (byteStringToVector)
 import qualified Data.Vector.Storable as V
 import qualified Foreign.Storable as F
@@ -20,6 +20,9 @@ instance Noisy Word8 where
 
 instance Noisy Word16 where
     noise _ n = byteStringToVector <$> Random.getRandomBytes (n * F.sizeOf (0 :: Word16))
+
+instance Noisy Word32 where
+    noise _ n = byteStringToVector <$> Random.getRandomBytes (n * F.sizeOf (0 :: Word32))
 
 instance Noisy Float where 
     noise _ n = float <$> (noise @Word16 Proxy n)
@@ -80,6 +83,7 @@ instance Combine Float where
 
 instance Combine Word8
 instance Combine Word16
+instance Combine Word32
 instance Combine Pic.PixelYA8
 instance Combine Pic.PixelYA16
 instance Combine Pic.PixelRGB8
@@ -97,15 +101,21 @@ class Floatable a where
 
 instance Floatable Word8 where
     {-# INLINE float #-}
-    float = V.map (\x -> fromIntegral x / 255)
+    float = V.map (\x -> fromIntegral x / 0xFF)
     {-# INLINE unfloat #-}
-    unfloat = V.map (\x -> round (x * 255))
+    unfloat = V.map (\x -> round (x * 0xFF))
 
 instance Floatable Word16 where
     {-# INLINE float #-}
-    float = V.map (\x -> fromIntegral x / 65535)
+    float = V.map (\x -> fromIntegral x / 0xFFFF)
     {-# INLINE unfloat #-}
-    unfloat = V.map (\x -> round (x * 65535))
+    unfloat = V.map (\x -> round (x * 0xFFFF))
+
+instance Floatable Word32 where
+    {-# INLINE float #-}
+    float = V.map (\x -> fromIntegral x / 0xFFFFFFFF)
+    {-# INLINE unfloat #-}
+    unfloat = V.map (\x -> round (x * 0xFFFFFFFF))
 
 instance Floatable Float where
     {-# INLINE float #-}
@@ -125,6 +135,7 @@ clean' aggr image = case image of
     Pic.ImageYF     (img :: Pic.Image Pic.PixelF)      -> Pic.ImageYF     <$> clean aggr img
     Pic.ImageYA8    (img :: Pic.Image Pic.PixelYA8)    -> Pic.ImageYA8    <$> clean aggr img
     Pic.ImageYA16   (img :: Pic.Image Pic.PixelYA16)   -> Pic.ImageYA16   <$> clean aggr img
+    Pic.ImageY32    (img :: Pic.Image Word32)          -> Pic.ImageY32    <$> clean aggr img
     Pic.ImageRGB8   (img :: Pic.Image Pic.PixelRGB8)   -> Pic.ImageRGB8   <$> clean aggr img
     Pic.ImageRGB16  (img :: Pic.Image Pic.PixelRGB16)  -> Pic.ImageRGB16  <$> clean aggr img
     Pic.ImageRGBF   (img :: Pic.Image Pic.PixelRGBF)   -> Pic.ImageRGBF   <$> clean aggr img
