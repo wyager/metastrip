@@ -43,7 +43,7 @@ Available options:
 
 ## Installation
 
-The best way to install from source is to install [The Haskell Stack](https://docs.haskellstack.org/en/stable/README/) and then run `stack install`. It will usually take a few minutes to build the dependencies and the binary.
+The best way to install from source is to install [The Haskell Stack](https://docs.haskellstack.org/en/stable/README/) and then run `stack install` in this directory. It will usually take a few minutes to build the dependencies and the binary.
 
 ## Limitations
 
