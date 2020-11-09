@@ -25,12 +25,12 @@ dependencies:
 - optparse-applicative
 - cryptonite
 - bytestring
-- spool
 - vector
 - filepath
 - memory
 - resource-pool
 - async
+- bytestring-to-vector
 
 ghc-options:
 - -O2

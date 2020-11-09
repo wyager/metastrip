@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6501cdd1f2001ae9523afcf86ac32af59c481dd751c2630cc7a7251104255801
+-- hash: 5bf48ddb8f1b841506bc12068bb1d4260e779c1f3001d1d63d34b9f803bc4402
 
 name:           metastrip
 version:        0.1.0.0
@@ -39,12 +39,12 @@ library
     , async
     , base >=4.7 && <5
     , bytestring
+    , bytestring-to-vector
     , cryptonite
     , filepath
     , memory
     , optparse-applicative
     , resource-pool
-    , spool
     , vector
   default-language: Haskell2010
 
@@ -61,13 +61,13 @@ executable metastrip
     , async
     , base >=4.7 && <5
     , bytestring
+    , bytestring-to-vector
     , cryptonite
     , filepath
     , memory
     , metastrip
     , optparse-applicative
     , resource-pool
-    , spool
     , vector
   default-language: Haskell2010
 
@@ -85,12 +85,12 @@ test-suite metastrip-test
     , async
     , base >=4.7 && <5
     , bytestring
+    , bytestring-to-vector
     , cryptonite
     , filepath
     , memory
     , metastrip
     , optparse-applicative
     , resource-pool
-    , spool
     , vector
   default-language: Haskell2010

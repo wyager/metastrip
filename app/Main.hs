@@ -56,16 +56,17 @@ command = Clean <$> naming <*> directory <*> randomization <*> jpegSaveQuality <
                                       <> OA.short 'n' 
                                       <> OA.help "Specify number of threads (default: # of cores available)" 
                                       <> OA.metavar "INT")
-    randomization = (RandomizeWith <$> aggressiveness) <|> none
+    randomization = highAggressiveness <|> none <|> defaultAggressiveness
         where
-        aggressiveness = OA.flag Normal High $ 
-                            OA.long "aggressive" 
-                         <> OA.short 'a' 
-                         <> OA.help "Aggressively randomize pixel values (default: Slight randomization)"
+        highAggressiveness = OA.flag' (RandomizeWith High) $ 
+                             OA.long "aggressive" 
+                          <> OA.short 'a' 
+                          <> OA.help "Aggressively randomize pixel values (default: Slight randomization)"
         none = OA.flag' NoRandomization $ 
                             OA.long "dont-randomize" 
                          <> OA.short 'd' 
                          <> OA.help "Do not randomize pixel values at all"
+        defaultAggressiveness = pure (RandomizeWith Normal)
     naming = random <|> inPlace <|> beforeExtension
         where
         random = OA.flag' Random (OA.long "random-name" 
