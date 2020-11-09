@@ -47,7 +47,7 @@ The best way to install from source is to install [The Haskell Stack](https://do
 
 ## Limitations
 
-Right now, metastrip always decodes and re-encodes the image. This means that if you only want to strip metadata (and not randomize pixel values), metastrip is doing a lot of extra work (the slowest part by far is re-encoding the image) and also introducing a bit of extra error in lossy formats like jpg. Perhaps at some point `--dont-randomize` will avoid actually decoding and re-encoding the image data.
+Right now, metastrip always decodes and re-encodes the image. This means that if you only want to strip metadata (and not randomize pixel values), metastrip is doing a lot of extra work (the slowest part by far is re-encoding the image) and also introducing a bit of extra error in lossy formats like jpg. Perhaps at some point `--dont-randomize` will avoid actually decoding and re-encoding the image data. This is complicated by a number of factors like color profiles, which require preserving some metadata to retain the image appearance.
 
 ## Security
 
